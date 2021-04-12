@@ -280,6 +280,7 @@ public class IconJspBean extends PluginAdminPageJspBean
         int nIdIcon = WorkflowUtils.convertStringToInt( strIdIcon );
         ActionFilter filter = new ActionFilter( );
         filter.setIdIcon( nIdIcon );
+        filter.setAutomaticReflexiveAction( false );
 
         List<Action> listAction = _actionService.getListActionByFilter( filter );
 
@@ -309,7 +310,8 @@ public class IconJspBean extends PluginAdminPageJspBean
         int nIdIcon = WorkflowUtils.convertStringToInt( strIdIcon );
         ActionFilter filter = new ActionFilter( );
         filter.setIdIcon( nIdIcon );
-
+        filter.setAutomaticReflexiveAction( false );
+        
         List<Action> listAction = _actionService.getListActionByFilter( filter );
 
         if ( !listAction.isEmpty( ) )

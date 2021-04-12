@@ -439,6 +439,7 @@ public class WorkflowJspBean extends PluginAdminPageJspBean
 
         ActionFilter actionFilter = new ActionFilter( );
         actionFilter.setIdWorkflow( nIdWorkflow );
+        actionFilter.setAutomaticReflexiveAction( false );
 
         List<Action> listAction = _actionService.getListActionByFilter( actionFilter );
 
@@ -905,6 +906,7 @@ public class WorkflowJspBean extends PluginAdminPageJspBean
 
         ActionFilter filter = new ActionFilter( );
         filter.setIdStateBefore( nIdState );
+        filter.setAutomaticReflexiveAction( false );
 
         List<Action> listActionStateBefore = _actionService.getListActionByFilter( filter );
         filter.setIdStateBefore( ActionFilter.ALL_INT );
@@ -939,6 +941,7 @@ public class WorkflowJspBean extends PluginAdminPageJspBean
 
         ActionFilter filter = new ActionFilter( );
         filter.setIdStateBefore( nIdState );
+        filter.setAutomaticReflexiveAction( false );
 
         List<Action> listActionStateBefore = _actionService.getListActionByFilter( filter );
         filter.setIdStateBefore( ActionFilter.ALL_INT );
@@ -2113,6 +2116,7 @@ public class WorkflowJspBean extends PluginAdminPageJspBean
         Collection<Integer> listIdsLinkedAction = _actionService.getListIdsLinkedAction( nIdAction );
         ActionFilter filter = new ActionFilter( );
         filter.setIdWorkflow( nIdWorkflow );
+        filter.setAutomaticReflexiveAction( false );
 
         for ( Action actionToLink : _actionService.getListActionByFilter( filter ) )
         {

@@ -108,7 +108,9 @@ public class ActionResourceIdService extends ResourceIdService
     {
         IActionService actionService = SpringContextService.getBean( ActionService.BEAN_SERVICE );
         IWorkflowService workflowService = SpringContextService.getBean( WorkflowService.BEAN_SERVICE );
-        List<Action> listAction = actionService.getListActionByFilter( new ActionFilter( ) );
+        ActionFilter filter = new ActionFilter( );
+        filter.setAutomaticReflexiveAction( false );
+        List<Action> listAction = actionService.getListActionByFilter( filter );
         ReferenceList reflistAction = new ReferenceList( );
 
         for ( Action action : listAction )
