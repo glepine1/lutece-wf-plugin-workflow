@@ -66,7 +66,8 @@ public class ChooseStateTaskService extends AbstractStateTaskService implements 
         return config;
     }
 
-    private IChooseStateController getController( ChooseStateTaskConfig config )
+    @Override
+    public IChooseStateController getController( ChooseStateTaskConfig config )
     {
         for ( IChooseStateController controller : getControllerList( ) )
         {

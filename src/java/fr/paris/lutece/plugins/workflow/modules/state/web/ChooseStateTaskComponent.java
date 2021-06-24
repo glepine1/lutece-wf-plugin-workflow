@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import fr.paris.lutece.plugins.workflow.modules.state.business.ChooseStateTaskConfig;
 import fr.paris.lutece.plugins.workflow.modules.state.business.ChooseStateTaskInformation;
 import fr.paris.lutece.plugins.workflow.modules.state.business.ChooseStateTaskInformationHome;
+import fr.paris.lutece.plugins.workflow.modules.state.service.IChooseStateController;
 import fr.paris.lutece.plugins.workflow.modules.state.service.IChooseStateTaskService;
 import fr.paris.lutece.plugins.workflow.web.task.NoFormTaskComponent;
 import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
@@ -54,33 +55,71 @@ public class ChooseStateTaskComponent extends NoFormTaskComponent
     private static final String TEMPLATE_TASK_CHOOSE_STATE_CONFIG = "admin/plugins/workflow/modules/state/task_choose_state_config_form.html";
     private static final String TEMPLATE_TASK_CHOOSE_STATE_INFORMATION = "admin/plugins/workflow/modules/state/task_choose_state_information.html";
 
+    private static final String PARAMETER_ACTION = "apply";
+    
     // Marks
     private static final String MARK_LIST_STATES = "list_states";
     private static final String MARK_LIST_CONTROLLERS = "controller_list";
     private static final String MARK_SELECTED_CONTROLLER = "selected_controller";
     private static final String MARK_NEW_STATE = "new_state";
     private static final String MARK_CONFIG = "config";
+    private static final String MARK_CONTROLLER_CONFIG = "controller_config_html";
+    
+    // Actions
+    private static final String ACTION_SELECT_CONTROLLER = "select_controller_config";
 
     // Services
     @Inject
     private IChooseStateTaskService _chooseStateTaskService;
 
+    private ChooseStateTaskConfig _config;
+    
     @Override
     public String getDisplayConfigForm( HttpServletRequest request, Locale locale, ITask task )
     {
-        ChooseStateTaskConfig config = _chooseStateTaskService.loadConfig( task );
+        _config = _chooseStateTaskService.loadConfig( task );
 
         Map<String, Object> model = new HashMap<>( );
-        model.put( MARK_CONFIG, config );
+        model.put( MARK_CONFIG, _config );
         model.put( MARK_LIST_STATES, _chooseStateTaskService.getListStates( task.getAction( ).getId( ) ) );
         model.put( MARK_LIST_CONTROLLERS, _chooseStateTaskService.getControllerList( ) );
-        model.put( MARK_SELECTED_CONTROLLER, config.getControllerName( ) );
+        model.put( MARK_SELECTED_CONTROLLER, _config.getControllerName( ) );
+        
+        IChooseStateController controller = _chooseStateTaskService.getController( _config );
+        if ( controller != null && controller.hasConfig( ) )
+        {
+            model.put( MARK_CONTROLLER_CONFIG, controller.getDisplayConfigForm( request, locale, _config ) );
+        }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_CHOOSE_STATE_CONFIG, locale, model );
 
         return template.getHtml( );
     }
-
+    
+    @Override
+    public String doSaveConfig( HttpServletRequest request, Locale locale, ITask task )
+    {
+        _config = getTaskConfigService( ).findByPrimaryKey( task.getId( ) );
+        String action = request.getParameter( PARAMETER_ACTION );
+        if ( action != null )
+        {
+            doProcessAction( action, request );
+        }
+        getTaskConfigService( ).update( _config );
+        return null;
+        
+    }
+    
+    private void doProcessAction( String action, HttpServletRequest request )
+    {
+        switch( action )
+        {
+            case ACTION_SELECT_CONTROLLER:
+                _config
+            break;
+        }
+    }
+    
     @Override
     public String getDisplayTaskInformation( int nIdHistory, HttpServletRequest request, Locale locale, ITask task )
     {
